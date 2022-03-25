@@ -1,8 +1,30 @@
+using Automation_logger_extended.Data;
+using Automation_logger_extended.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
+using AutoMapper;
+using Automation_logger_extended.Mappings;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+});
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<webContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectiion"));
+});
+
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
+builder.Services.AddScoped<ITestCaseRepository, TestCaseRepository>();
+builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
+builder.Services.AddScoped<ITestResultRepository, TestResultRepository>();
 
 var app = builder.Build();
 
@@ -17,6 +39,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller}/{action=Index}/{id?}");
+//});
 
 app.MapControllerRoute(
     name: "default",

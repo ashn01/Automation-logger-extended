@@ -6,14 +6,23 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Automation_logger_extended.Models
 {
-    public class Template
+    public class TestResult
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public Boolean Status { get; set; }
+        [Required]
+        public string? Version { get; set; }
+        [Required]
+        public DateTimeOffset Created { get; set; }
+
         // relationship
-        public ICollection<TestResult>? TestResults { get; set; }
+        public int TemplateId {get; set;}
+        public Template Template { get; set; }
+
+        public int TestCaseId { get; set; }
+        public TestCase TestCase { get; set; }
     }
 }
