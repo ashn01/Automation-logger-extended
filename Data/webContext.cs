@@ -19,6 +19,7 @@ namespace Automation_logger_extended.Data
             base.OnModelCreating(builder);
 
             // relationship between Template and TestResult
+            // reference key
             builder.Entity<Template>()
                 .HasMany<TestResult>(template => template.TestResults) // Template contains many TestResults
                 .WithOne(testResult => testResult.Template) // testTestResultResult has one Template
@@ -26,6 +27,7 @@ namespace Automation_logger_extended.Data
                 .IsRequired(); // is required
 
             // relationship between TestCase and TestResult
+            // reference key
             builder.Entity<TestCase>()
                 .HasMany<TestResult>(testCase => testCase.TestResults) // TestCase contains many TestResults
                 .WithOne(testResult => testResult.TestCase) // TestResult has one TestCase

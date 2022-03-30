@@ -1,4 +1,4 @@
-import Home from './component/body/Home.tsx'
+import Home from './component/body/Home'
 
 import './App.css';
 

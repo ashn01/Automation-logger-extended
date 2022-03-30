@@ -8,9 +8,11 @@ namespace Automation_logger_extended.Models
 {
     public class Template
     {
+        // two primary keys
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
         // relationship

@@ -4,5 +4,6 @@ namespace Automation_logger_extended.Data.Repositories
 {
     public interface ITemplateRepository : IGenericRepository<Template>
     {
+        Template? GetEntityByName(string name);
     }
 }

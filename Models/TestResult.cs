@@ -19,7 +19,7 @@ namespace Automation_logger_extended.Models
         public DateTimeOffset Created { get; set; }
 
         // relationship
-        public int TemplateId {get; set;}
+        public int TemplateId { get; set; }
         public Template Template { get; set; }
 
         public int TestCaseId { get; set; }

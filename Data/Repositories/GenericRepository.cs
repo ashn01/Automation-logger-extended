@@ -19,7 +19,11 @@ namespace Automation_logger_extended.Data.Repositories
         {
             return _webContext.Set<TEntity>().AsNoTracking();
         }
-        public async Task Create(TEntity entity)
+        public void Create(TEntity entity)
+        {
+             _webContext.Set<TEntity>().Add(entity);
+        }
+        public async Task CreateWithSave(TEntity entity)
         {
             await _webContext.Set<TEntity>().AddAsync(entity);
             await Save();
@@ -29,9 +33,23 @@ namespace Automation_logger_extended.Data.Repositories
             _webContext.Set<TEntity>().Update(entity);
             await Save();
         }
+
+        public void DeleteAll()
+        {
+            foreach(var entity in _webContext.Set<TEntity>())
+            {
+                _webContext.Set<TEntity>().Remove(entity);
+            }
+            SaveChanges();
+        }
+
         public async Task Save()
         {
             await _webContext.SaveChangesAsync();
+        }
+        public void SaveChanges()
+        {
+            _webContext.SaveChanges();
         }
     }
 }

@@ -8,5 +8,10 @@ namespace Automation_logger_extended.Data.Repositories
     public class TestResultRepository : GenericRepository<TestResult>, ITestResultRepository
     {
         public TestResultRepository(webContext webContext) : base(webContext) { }
+
+        public async Task Create(TestCase testcase)
+        {
+            await _webContext.AddAsync(testcase);
+        }
     }
 }

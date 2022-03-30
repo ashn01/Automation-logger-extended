@@ -71,5 +71,19 @@ namespace Automation_logger_extended.Data.Repositories
 
             return entities;
         }
+
+        /*
+         * Name     :   GetEntityByName
+         * Params   :   string, name of testcase
+         * Return   :   TestCase, an object with data or null if not found
+         * Note     :   
+         */
+        public TestCase? GetEntityByName(string name)
+        {
+            var result = _webContext.TestCases
+                         .Where(testcase => testcase.Name == name)
+                         .SingleOrDefault();
+            return result;
+        }
     }
 }
