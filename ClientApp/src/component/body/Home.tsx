@@ -2,7 +2,11 @@ import axios from 'axios';
 import React, {useState} from 'react';
 import { useEffect } from 'react';
 import { Tab, Table, Tabs } from 'react-bootstrap';
-import Testresult from './TestResult'
+import {
+    Autocomplete,
+    TextField
+} from '@mui/material'
+import Testresult, {SearchTestresult} from './TestResult'
 
 import '../../css/home.css'
 
@@ -10,12 +14,15 @@ import {TestCase, TestResult, TestResultViewModel} from '../../interface/interfa
 
 export default function Home() {
     const [testCases, setTestCases] = useState<Array<TestCase>>();
+    const [searched, setSearched] = useState<TestCase>();
     const [tab, setTab] = useState<string>('international');
     const [isDataLoaded,setIsDataLoaded] = useState<boolean>(false);
+    const [isSearch, setIsSearch] = useState<boolean>(false);
 
     useEffect(()=>{
         console.log(`get ${tab}`)
         setIsDataLoaded(false)
+        // get data
         axios.get(`/api/testcase/${tab}`)
         .then((res=>{
             console.log(res)
@@ -41,10 +48,10 @@ export default function Home() {
         console.log("hey")
         let tr:TestResultViewModel = {
             created: new Date(),
-            status:true,
+            status:false,
             templateName:"international",
-            testCaseName:"Automated Acceptance Test/Audit - Client Acceptance Part 2.t",
-            version:"25.00.101"
+            testCaseName:"Automated Acceptance Test/Audit - Client Acceptance Part 1.t",
+            version:"25.00.103"
         }
         axios.post('/api/testresult', tr).then((res => {
             console.log(res)
@@ -54,13 +61,47 @@ export default function Home() {
         })
     }
 
+    const searchByTestcaseName = (value:string|null) =>{
+        console.log(value)
+        setIsDataLoaded(false)
+        if(value != null){
+            // do search
+            setIsSearch(true);
+            axios.get(`/api/testresult/${tab}/${value}`)
+            .then((res=>{
+                console.log(res)
+                setSearched(res.data);
+            }))
+            .catch(err=>{
+                console.log(err)
+            })
+        }else{
+            // return to home
+            setIsSearch(false);
+        }
+        setIsDataLoaded(true)
+    }
+
     return (
         <div>
+            <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={testCases?testCases.map((option)=>option.name):[]}
+                sx={{ width: 700 }}
+                renderInput={(params) => <TextField {...params} label="Test cases" />}
+                onChange={(event:any, newValue:string|null)=>{
+                    searchByTestcaseName(newValue)
+                }}
+            />
             <button onClick={InitBtn}>Init</button>
             <button onClick={testBtn}>Test</button>
             <Tabs activeKey={tab} id="uncontrolled-tab" className="mb-3" onSelect={(k)=>setTab(k?k:"international")}>
                 <Tab eventKey="international" title="International">
-                    <Testresult testCases={testCases} dataLoaded={isDataLoaded}/>
+                    {isSearch == false ? 
+                    <Testresult testCases={testCases} dataLoaded={isDataLoaded}/> :
+                    <SearchTestresult testCase={searched} dataLoaded={isDataLoaded}/>
+                    }
                 </Tab>
                 <Tab eventKey="us" title="US">
                     <Testresult testCases={testCases} dataLoaded={isDataLoaded}/>
