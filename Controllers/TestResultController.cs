@@ -53,5 +53,20 @@ namespace Automation_logger_extended.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("{template}/{**testcaseName}")]
+        public IActionResult SearchTestResults(string template, string testcaseName)
+        {
+            try
+            {
+                TestCase testCase = _testCaseRepository.GetEntityWithResults(testcaseName, template);
+                return Ok(testCase);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
+            }
+        }
     }
 }
