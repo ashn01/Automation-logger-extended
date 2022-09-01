@@ -5,12 +5,13 @@ namespace Automation_logger_extended.Models
 {
     public class Panel
     {
-        [Key, Column(Order =0)]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; } 
         public int TestCaseId { get; set; }
-        public TestCase TestCase { get; set; }
-        [Key, Column(Order = 1)]
+        public TestCase? TestCase { get; set; }
         public int TemplateId { get; set; }
-        public Template Template { get; set; }
+        public Template? Template { get; set; }
 
         public int Order { get; set; }
     }
