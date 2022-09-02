@@ -7,5 +7,6 @@ namespace Automation_logger_extended.Data.Repositories
         IEnumerable<TestCase> GetEntities(string template);
         TestCase? GetEntityByName(string name);
         TestCase? GetEntityWithResults(string testcaseName, string template);
+        IEnumerable<TestCase> GetEntitiesWithName(string testcaseName);
     }
 }

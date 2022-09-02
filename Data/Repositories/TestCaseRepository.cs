@@ -66,6 +66,7 @@ namespace Automation_logger_extended.Data.Repositories
                                 .Take(5)
                                 .ToList(),
                 })
+                .OrderBy(testcase => testcase.Order)
                 .ToList();
 
 
@@ -120,6 +121,20 @@ namespace Automation_logger_extended.Data.Repositories
                                 .ToList()
                          })
                         .SingleOrDefault();
+            return result;
+        }
+        /*
+         * Name     :   GetEntitiesWithName
+         * Params   :   testcaseName, partial name
+         * Return   :   List of test results
+         * Note     :   Return test cases that contains testcase name
+         */
+        public IEnumerable<TestCase> GetEntitiesWithName(string testcaseName)
+        {
+            var result = _webContext.TestCases
+                         .Where(testcase => testcase.Name != null && testcase.Name.Contains(testcaseName))
+                         .ToList();
+
             return result;
         }
 
