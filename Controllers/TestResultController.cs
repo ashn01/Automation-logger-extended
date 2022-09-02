@@ -25,8 +25,8 @@ namespace Automation_logger_extended.Controllers
             _testCaseRepository = testCaseRepository;
         }
 
-        [HttpPut]
-        public IActionResult PutTestResult([FromBody] TestResultViewModel testResult)
+        [HttpPost]
+        public IActionResult PostTestResult([FromBody] TestResultViewModel testResult)
         {
             try
             {
