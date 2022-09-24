@@ -25,7 +25,7 @@ export default function Home() {
         // get data
         axios.get(`/api/testcase/${tab}`)
         .then((res=>{
-            console.log(res)
+            // console.log(res)
             setTestCases(res.data);
             setIsDataLoaded(true)
         }))
@@ -84,32 +84,34 @@ export default function Home() {
 
     return (
         <div>
-            <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={testCases?testCases.map((option)=>option.name):[]}
-                sx={{ width: 700 }}
-                renderInput={(params) => <TextField {...params} label="Test cases" />}
-                onChange={(event:any, newValue:string|null)=>{
-                    searchByTestcaseName(newValue)
-                }}
-            />
-            <button onClick={InitBtn}>Init</button>
-            <button onClick={testBtn}>Test</button>
-            <Tabs activeKey={tab} id="uncontrolled-tab" className="mb-3" onSelect={(k)=>setTab(k?k:"international")}>
-                <Tab eventKey="international" title="International">
-                    {isSearch == false ? 
-                    <Testresult testCases={testCases} dataLoaded={isDataLoaded}/> :
-                    <SearchTestresult testCase={searched} dataLoaded={isDataLoaded}/>
-                    }
-                </Tab>
-                <Tab eventKey="us" title="US">
-                    <Testresult testCases={testCases} dataLoaded={isDataLoaded}/>
-                </Tab>
-                <Tab eventKey="system" title="System">
-                    <Testresult testCases={testCases} dataLoaded={isDataLoaded}/>
-                </Tab>
-            </Tabs>
+            <div id="auto-complete-container">
+                <Autocomplete
+                    disablePortal
+                    id="auto-complete"
+                    options={testCases?testCases.map((option)=>option.name):[]}
+                    sx={{ width: 700 }}
+                    renderInput={(params) => <TextField {...params} label="Test cases" />}
+                    onChange={(event:any, newValue:string|null)=>{
+                        searchByTestcaseName(newValue)
+                    }}
+                />
+            </div>
+            <div id="test-result-container">
+                <Tabs activeKey={tab} id="uncontrolled-tab" onSelect={(k)=>setTab(k?k:"international")}>
+                    <Tab eventKey="international" title="International">
+                        {isSearch == false ? 
+                        <Testresult testCases={testCases} dataLoaded={isDataLoaded}/> :
+                        <SearchTestresult testCase={searched} dataLoaded={isDataLoaded}/>
+                        }
+                    </Tab>
+                    <Tab eventKey="us" title="US">
+                        <Testresult testCases={testCases} dataLoaded={isDataLoaded}/>
+                    </Tab>
+                    <Tab eventKey="system" title="System">
+                        <Testresult testCases={testCases} dataLoaded={isDataLoaded}/>
+                    </Tab>
+                </Tabs>
+            </div>
         </div>
     );
 }
