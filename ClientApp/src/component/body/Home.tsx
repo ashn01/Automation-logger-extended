@@ -1,7 +1,7 @@
 import axios from 'axios';
-import React, {useState} from 'react';
+import {useState} from 'react';
 import { useEffect } from 'react';
-import { Tab, Table, Tabs } from 'react-bootstrap';
+import { Tab, Tabs } from 'react-bootstrap';
 import {
     Autocomplete,
     TextField
@@ -10,7 +10,7 @@ import Testresult, {SearchTestresult} from './TestResult'
 
 import '../../css/home.css'
 
-import {TestCase, TestResult, TestResultViewModel} from '../../interface/interface'
+import {TestCase, TestResultViewModel} from '../../interface/interface'
 
 export default function Home() {
     const [testCases, setTestCases] = useState<Array<TestCase>>();
@@ -23,7 +23,7 @@ export default function Home() {
         console.log(`get ${tab}`)
         setIsDataLoaded(false)
         // get data
-        axios.get(`/api/testcase/${tab}`)
+        axios.post(`/api/testscript/${tab}`)
         .then((res=>{
             // console.log(res)
             setTestCases(res.data);
@@ -36,7 +36,7 @@ export default function Home() {
 
     const InitBtn = () =>{
         console.log("Init")
-        axios.get('/api/testcase/init').then((res => {
+        axios.get('/api/testscript/init').then((res => {
             console.log(res)
         }))
         .catch(err=>{

@@ -1,0 +1,20 @@
+#automator-container{
+    margin: 0 auto;
+    max-width: 2000px;
+    width: 90%;
+    text-align: left;
+
+    #card-container{
+        padding: 10px;
+        overflow-y: scroll;
+        height: 80vh;
+        #card{
+            margin-bottom: 10px;
+    
+            #close-button{
+                float: right;
+            }
+        }
+
+    }
+}

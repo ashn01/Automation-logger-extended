@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace Automation_logger_extended.Models
 {
-    public class TestCase
+    public class TestScript
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
