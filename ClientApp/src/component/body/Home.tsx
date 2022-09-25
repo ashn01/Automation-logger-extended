@@ -23,7 +23,7 @@ export default function Home() {
         console.log(`get ${tab}`)
         setIsDataLoaded(false)
         // get data
-        axios.post(`/api/testscript/${tab}`)
+        axios.get(`/api/testscript/${tab}`)
         .then((res=>{
             // console.log(res)
             setTestCases(res.data);

@@ -23,6 +23,6 @@ namespace Automation_logger_extended.Models
         public Template Template { get; set; }
 
         public int TestScriptId { get; set; }
-        public TestScript TestCase { get; set; }
+        public TestScript TestScript { get; set; }
     }
 }

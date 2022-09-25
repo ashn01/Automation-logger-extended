@@ -56,3 +56,7 @@ app.MapControllerRoute(
 //app.MapFallbackToFile("index.html"); ;
 
 app.Run();
+
+/*
+ *  After adding a controller, setupProxy.js also have to be updated
+ */

@@ -2,7 +2,6 @@
 using Automation_logger_extended.Models;
 using Automation_logger_extended.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Automation_logger_extended.Controllers
 {
@@ -17,12 +16,12 @@ namespace Automation_logger_extended.Controllers
         public TestResultController(
             ITestResultRepository testResultRepository,
             ITemplateRepository templateRepository,
-            ITestScriptRepository testCaseRepository
+            ITestScriptRepository testScriptRepository
             )
         {
             _testResultRepository = testResultRepository;
             _templateRepository = templateRepository;
-            _testScriptRepository = testCaseRepository;
+            _testScriptRepository = testScriptRepository;
         }
 
         [HttpPost]
@@ -31,17 +30,17 @@ namespace Automation_logger_extended.Controllers
             try
             {
                 Template template = _templateRepository.GetEntityByName(testResult.TemplateName);
-                TestScript testScript = _testScriptRepository.GetEntityByName(testResult.TestCaseName);
+                TestScript testScript = _testScriptRepository.GetEntityByName(testResult.TestScriptName);
                 // no test case found
                 if (testScript == null)
                 {
-                    string[] split = testResult.TestCaseName.Split("/");
+                    string[] split = testResult.TestScriptName.Split("/");
                     string testSection = split[0];
                     var testScripts = _testScriptRepository.GetEntitiesWithName(testSection);
-                    _testScriptRepository.Create(new Models.TestScript { Name = testResult.TestCaseName, Order = testScripts.Last().Order + 1 });
+                    _testScriptRepository.Create(new Models.TestScript { Name = testResult.TestScriptName, Order = testScripts.Last().Order + 1 });
                     _testScriptRepository.SaveChanges();
 
-                    testScript = _testScriptRepository.GetEntityByName(testResult.TestCaseName);
+                    testScript = _testScriptRepository.GetEntityByName(testResult.TestScriptName);
                 }
 
                 TestResult result = new TestResult
@@ -66,7 +65,7 @@ namespace Automation_logger_extended.Controllers
             }
         }
 
-        [HttpGet("{template}/{**testcaseName}")]
+        [HttpGet("{template}/{**testScriptName}")]
         public IActionResult SearchTestResults(string template, string testScriptName)
         {
             try

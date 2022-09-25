@@ -11,7 +11,7 @@ namespace Automation_logger_extended.Data
     {
         public webContext(DbContextOptions options) : base(options) { }
         public DbSet<Template> Templates { get; set; }
-        public DbSet<TestScript> TestCases { get; set; }
+        public DbSet<TestScript> TestScripts { get; set; }
         public DbSet<TestResult> TestResults { get; set; }
         public DbSet<Panel> Panels { get; set; } 
         public DbSet<TestStep> TestSteps { get; set; }
@@ -28,11 +28,11 @@ namespace Automation_logger_extended.Data
                 .HasForeignKey(TestResult => TestResult.TemplateId) // TestResult has a foreignKey
                 .IsRequired(); // is required
 
-            // relationship between TestCase and TestResult
+            // relationship between TestScript and TestResult
             // reference key
             builder.Entity<TestScript>()
-                .HasMany<TestResult>(testScript => testScript.TestResults) // TestCase contains many TestResults
-                .WithOne(testResult => testResult.TestCase) // TestResult has one TestCase
+                .HasMany<TestResult>(testScript => testScript.TestResults) // TestScript contains many TestResults
+                .WithOne(testResult => testResult.TestScript) // TestResult has one TestScript
                 .HasForeignKey(testResult => testResult.TestScriptId) // TestResult has a foreignKey
                 .IsRequired(); // is required
 
@@ -44,8 +44,8 @@ namespace Automation_logger_extended.Data
                 .IsRequired(); // is required
 
             builder.Entity<TestScript>()
-                .HasMany<Panel>(panel => panel.Panels) // TestCase contains many TestResults
-                .WithOne(panel => panel.TestCase) // TestResult has one TestCase
+                .HasMany<Panel>(panel => panel.Panels) // TestScript contains many TestResults
+                .WithOne(panel => panel.TestScript) // TestResult has one TestScript
                 .HasForeignKey(panel => panel.TestScriptId) // TestResult has a foreignKey
                 .IsRequired(); // is required
         }

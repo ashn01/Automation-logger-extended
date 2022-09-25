@@ -7,6 +7,6 @@
         public string? Version { get; set; }
         public DateTimeOffset? Created { get; set; }
         public string TemplateName { get; set; }
-        public string TestCaseName { get; set; }
+        public string TestScriptName { get; set; }
     }
 }
