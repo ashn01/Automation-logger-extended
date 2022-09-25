@@ -17,5 +17,6 @@ namespace Automation_logger_extended.Models
         public string Name { get; set; }
         // relationship
         public ICollection<TestResult>? TestResults { get; set; }
+        public ICollection<Panel>? Panels { get; set; }
     }
 }

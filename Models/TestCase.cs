@@ -18,6 +18,7 @@ namespace Automation_logger_extended.Models
 
         // relationship
         public ICollection<TestResult>? TestResults { get; set; }
+        public ICollection<Panel>? Panels { get; set; }
         [NotMapped]
         public TestResult? RecentPass { get; set; }
         [NotMapped]

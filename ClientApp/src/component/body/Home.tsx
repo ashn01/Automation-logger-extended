@@ -53,7 +53,7 @@ export default function Home() {
             testCaseName:"Automated Acceptance Test/Audit - Client Acceptance Part 1.t",
             version:"25.00.103"
         }
-        axios.post('/api/testresult', tr).then((res => {
+        axios.put('/api/testresult', tr).then((res => {
             console.log(res)
         }))
         .catch(err=>{
