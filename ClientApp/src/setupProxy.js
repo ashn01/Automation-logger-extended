@@ -8,6 +8,7 @@ const context =  [
   "/api/testscript",
   "/api/template",
   "/api/testresult",
+  "/api/teststep",
 ];
 
 module.exports = function(app) {
