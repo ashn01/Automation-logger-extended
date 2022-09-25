@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace Automation_logger_extended.Data.Repositories
 {
-    public class TestCaseRepository : GenericRepository<TestCase>, ITestCaseRepository
+    public class TestScriptRepository : GenericRepository<TestScript>, ITestScriptRepository
     {
-        public TestCaseRepository(webContext webContext) : base(webContext) { }
+        public TestScriptRepository(webContext webContext) : base(webContext) { }
 
         /*
          * Name     :   GetEntities
@@ -16,10 +16,10 @@ namespace Automation_logger_extended.Data.Repositories
          * Return   :   List of testcases
          * Note     :   All testcases with all the results
          */
-        public IEnumerable<TestCase> GetEntities(string template)
+        public IEnumerable<TestScript> GetEntities(string template)
         {
-            IEnumerable<TestCase> entities = _webContext.TestCases
-                .Select(tCase=>new TestCase
+            IEnumerable<TestScript> entities = _webContext.TestCases
+                .Select(tCase=>new TestScript
                 {
                     Id = tCase.Id,
                     Name = tCase.Name,
@@ -51,7 +51,7 @@ namespace Automation_logger_extended.Data.Repositories
                     TestResults = tCase.TestResults
                                 .Where( tResult => 
                                         tResult != null 
-                                        && tResult.TestCaseId == tCase.Id 
+                                        && tResult.TestScriptId == tCase.Id 
                                         && tResult.Template.Name.Equals(template))
                                 .Select(tResult => new TestResult
                                 {
@@ -59,7 +59,7 @@ namespace Automation_logger_extended.Data.Repositories
                                     Created = tResult.Created,
                                     Status = tResult.Status,
                                     Template = new Template {Name = tResult.Template.Name },
-                                    TestCaseId = tCase.Id,
+                                    TestScriptId = tCase.Id,
                                     Version = tResult.Version,
                                 })
                                 .OrderByDescending(tResult => tResult.Created)
@@ -79,7 +79,7 @@ namespace Automation_logger_extended.Data.Repositories
          * Return   :   TestCase, an object with data or null if not found
          * Note     :   
          */
-        public TestCase? GetEntityByName(string name)
+        public TestScript? GetEntityByName(string name)
         {
             var result = _webContext.TestCases
                          .Where(testcase => testcase.Name == name)
@@ -94,18 +94,18 @@ namespace Automation_logger_extended.Data.Repositories
          * Return   :   List of test results
          * Note     :   Return test results filtered by test case id
          */
-        public TestCase? GetEntityWithResults(string testcaseName, string template)
+        public TestScript? GetEntityWithResults(string testcaseName, string template)
         {
             var result = _webContext.TestCases
                          .Where(testcase => testcase.Name == testcaseName)
-                         .Select(testcase => new TestCase
+                         .Select(testcase => new TestScript
                          {
                              Name = testcase.Name,
                              Order = testcase.Order,
                              TestResults = testcase.TestResults
                                 .Where(tResult =>
                                        tResult != null
-                                       && tResult.TestCaseId == testcase.Id
+                                       && tResult.TestScriptId == testcase.Id
                                        && tResult.Template.Name.Equals(template))
                                 .Select(tResult => new TestResult
                                 {
@@ -113,7 +113,7 @@ namespace Automation_logger_extended.Data.Repositories
                                     Created = tResult.Created,
                                     Status = tResult.Status,
                                     Template = new Template { Name = tResult.Template.Name },
-                                    TestCaseId = testcase.Id,
+                                    TestScriptId = testcase.Id,
                                     Version = tResult.Version,
                                 })
                                 .OrderByDescending(tResult => tResult.Created)
@@ -129,7 +129,7 @@ namespace Automation_logger_extended.Data.Repositories
          * Return   :   List of test results
          * Note     :   Return test cases that contains testcase name
          */
-        public IEnumerable<TestCase> GetEntitiesWithName(string testcaseName)
+        public IEnumerable<TestScript> GetEntitiesWithName(string testcaseName)
         {
             var result = _webContext.TestCases
                          .Where(testcase => testcase.Name != null && testcase.Name.Contains(testcaseName))

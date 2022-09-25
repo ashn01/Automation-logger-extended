@@ -12,17 +12,17 @@ namespace Automation_logger_extended.Controllers
     {
         private readonly ITestResultRepository _testResultRepository;
         private readonly ITemplateRepository _templateRepository;
-        private readonly ITestCaseRepository _testCaseRepository;
+        private readonly ITestScriptRepository _testScriptRepository;
 
         public TestResultController(
             ITestResultRepository testResultRepository,
             ITemplateRepository templateRepository,
-            ITestCaseRepository testCaseRepository
+            ITestScriptRepository testCaseRepository
             )
         {
             _testResultRepository = testResultRepository;
             _templateRepository = templateRepository;
-            _testCaseRepository = testCaseRepository;
+            _testScriptRepository = testCaseRepository;
         }
 
         [HttpPost]
@@ -31,23 +31,23 @@ namespace Automation_logger_extended.Controllers
             try
             {
                 Template template = _templateRepository.GetEntityByName(testResult.TemplateName);
-                TestCase testCase = _testCaseRepository.GetEntityByName(testResult.TestCaseName);
+                TestScript testScript = _testScriptRepository.GetEntityByName(testResult.TestCaseName);
                 // no test case found
-                if (testCase == null)
+                if (testScript == null)
                 {
                     string[] split = testResult.TestCaseName.Split("/");
                     string testSection = split[0];
-                    var testcases = _testCaseRepository.GetEntitiesWithName(testSection);
-                    _testCaseRepository.Create(new Models.TestCase { Name = testResult.TestCaseName, Order = testcases.Last().Order + 1 });
-                    _testCaseRepository.SaveChanges();
+                    var testScripts = _testScriptRepository.GetEntitiesWithName(testSection);
+                    _testScriptRepository.Create(new Models.TestScript { Name = testResult.TestCaseName, Order = testScripts.Last().Order + 1 });
+                    _testScriptRepository.SaveChanges();
 
-                    testCase = _testCaseRepository.GetEntityByName(testResult.TestCaseName);
+                    testScript = _testScriptRepository.GetEntityByName(testResult.TestCaseName);
                 }
 
                 TestResult result = new TestResult
                 {
                     TemplateId = template.Id,
-                    TestCaseId = testCase.Id,
+                    TestScriptId = testScript.Id,
                     Status = testResult.Status,
                     Version = testResult.Version,
                     Created = DateTime.UtcNow.AddHours(-4) // toronto time
@@ -67,12 +67,12 @@ namespace Automation_logger_extended.Controllers
         }
 
         [HttpGet("{template}/{**testcaseName}")]
-        public IActionResult SearchTestResults(string template, string testcaseName)
+        public IActionResult SearchTestResults(string template, string testScriptName)
         {
             try
             {
-                TestCase testCase = _testCaseRepository.GetEntityWithResults(testcaseName, template);
-                return Ok(testCase);
+                TestScript testScript = _testScriptRepository.GetEntityWithResults(testScriptName, template);
+                return Ok(testScript);
             }
             catch (Exception ex)
             {

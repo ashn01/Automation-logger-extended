@@ -22,7 +22,7 @@ builder.Services.AddDbContext<webContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 
-builder.Services.AddScoped<ITestCaseRepository, TestCaseRepository>();
+builder.Services.AddScoped<ITestScriptRepository, TestScriptRepository>();
 builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
 builder.Services.AddScoped<ITestResultRepository, TestResultRepository>();
 
@@ -41,15 +41,18 @@ app.UseRouting();
 
 //app.UseEndpoints(endpoints =>
 //{
-//    endpoints.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller}/{action=Index}/{id?}");
+//    //endpoints.MapControllerRoute(
+//    //name: "default",
+//    //pattern: "{controller}/{action=Index}/{id?}");
+//    endpoints.MapControllers();
 //});
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapFallbackToFile("index.html"); ;
+//app.MapControllers();
+
+//app.MapFallbackToFile("index.html"); ;
 
 app.Run();

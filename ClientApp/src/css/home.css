@@ -5,3 +5,12 @@
 .fail{
     background-color: rgb(255,100,100) !important;
 }
+
+#auto-complete-container {
+    margin: 0 0 30px 30px;
+}
+
+#test-result-container{
+    margin: 0 30px 30px 30px;
+
+}

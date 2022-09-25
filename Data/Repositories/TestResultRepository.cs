@@ -9,9 +9,9 @@ namespace Automation_logger_extended.Data.Repositories
     {
         public TestResultRepository(webContext webContext) : base(webContext) { }
 
-        public async Task Create(TestCase testcase)
+        public async Task Create(TestScript testScript)
         {
-            await _webContext.AddAsync(testcase);
+            await _webContext.AddAsync(testScript);
         }
 
     }
