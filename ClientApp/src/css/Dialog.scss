@@ -1,0 +1,10 @@
+div.MuiDialogContent-root{
+    padding: 10px 30px 20px 30px !important;
+    
+    /* Alert Dialog */
+    #alert-contents{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
