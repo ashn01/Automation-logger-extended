@@ -35,5 +35,6 @@ export interface TestResultViewModel{
 
 export interface TestStep{
     action:string,
-    code:string
+    code:string,
+    isStep?:boolean
 }

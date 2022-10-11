@@ -1,28 +1,28 @@
 import { Autocomplete, TextField } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react'
-import {Button, Card, CloseButton} from 'react-bootstrap'
+import {Button, Card} from 'react-bootstrap'
 
 import '../../css/automator.scss'
-import { MakeCamel } from '../../functions/general';
-import { generateTestSteps } from '../../functions/silktest';
+import { generateScript } from '../../functions/silktest';
 import { TestStep } from '../../interface/interface';
 import AlertDialog from './AlertDialog';
+import TestStepCard from './TestStepCard';
 
 export default function Automator(){
-    // test case name
+    // test case name, will be converted to Camel case
     const [testName, setTestName] = useState<string>('');
-    // test case ID
+    // test case ID, start with C####
     const [testID, setTestID] = useState<string>('');
-    // test action with code
+    // test action with code, testActions that user can choose from auto complete field
     const [testActions, setTestActions] = useState<Array<TestStep>>([]);
-    // save test steps
-    const [testStep, setTestStep] = useState<Array<TestStep>>([]);
-    // generated script
+    // save test steps, test steps that user select all test steps
+    const [testSteps, setTestSteps] = useState<Array<TestStep>>([]);
+    // generated script that actual silk test script
     const [testScript, setTestScript] = useState<string>('');
-    // add action dialog
+    // add action dialog. this is a trigger to open the dialog
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    // new action 
+    // new action
     const [newAction, setNewAction] = useState<string>('');
     // new action script
     const [newActionScript, setNewActionScript] = useState<string>('');
@@ -39,28 +39,39 @@ export default function Automator(){
         .catch(err=>{
             console.log(err)
         })
-    },[testStep.length])
+    },[testSteps.length])
     
     const addTestStep = (step:TestStep) =>{
         // TODO: adding test steps
-        const newArray = [...testStep];
+        const newArray = [...testSteps];
+        step.isStep = true; // step by default
         newArray.push(step);
-        setTestStep(newArray);
+        setTestSteps(newArray);
         // console.log(step)
         // for(let i=0;i<step.code.length;i++){
         //     console.log(step.code[i], step.code.charCodeAt(i))
         // }
     }
 
-    const reorderTestStep = () =>{
+    const reorderTestStep = (index:number, newIndex:number) =>{
         // TODO: reordering test steps
+        const newArray = [...testSteps];
+        [newArray[index], newArray[newIndex]] = [newArray[newIndex], newArray[index]]
+        setTestSteps(newArray);
     }
 
     const removeTestStep = (index:number) =>{
         // TODO: removing test steps
-        const newArray = [...testStep];
+        const newArray = [...testSteps];
         newArray.splice(index,1);
-        setTestStep(newArray);
+        setTestSteps(newArray);
+    }
+
+    const updateTestStep = (index:number, testStep:TestStep) =>{
+        // console.log(index, testStep.isStep)
+        const newArray = [...testSteps];
+        newArray[index]=testStep;
+        setTestSteps(newArray);
     }
 
     const addTestAction = () =>{
@@ -72,7 +83,8 @@ export default function Automator(){
         }
         axios.post(`/api/teststep`,newTestAction)
         .then(res=>{
-            console.log(res)
+            setTestActions(res.data)
+            setDialogOpen(false)
         })
         .catch(err=>{
             console.log(err)
@@ -81,28 +93,8 @@ export default function Automator(){
 
     // generate test case
     const generate = () =>{
-        let script = `// ${testID}
-testcase ${MakeCamel(testName)}() appstate VarsLoadedState
-\tSTRING sTestcaseId = "${testID}"
-\tLOGGER.testresult("${testName}", R_SUBTITLE, sTestcaseId)
-\t
-\tdo
-\t\tTaskbar.SetActive ()
-\t\tCaseWare.SetActive ()
-\texcept
-\t\tLOGGER.testresult("Testcase {GetTestCaseName ()} could not start. {ExceptData ()}", R_EXCEPT)
-\t\treraise
-\t
-\tdo`
-
-        let indentLevel = 2;
-
-        // Add each test cases here
-        script += generateTestSteps(testStep);
-
-        script += `
-\texcept
-\t\tLOGGER.testresult("Could not complete. {ExceptData()}", R_EXCEPT, sTestcaseId)`
+        // console.log(testSteps)
+        let script = generateScript(testID, testName, testSteps)
         // output
         console.log(script)
         setTestScript(script);
@@ -115,6 +107,7 @@ testcase ${MakeCamel(testName)}() appstate VarsLoadedState
                     disablePortal
                     id="auto-complete"
                     options={testActions?testActions.map((option)=>option):[]}
+                    isOptionEqualToValue={(option,value)=>option.action == value.action}
                     getOptionLabel={options=>options.action}
                     sx={{ width: 700 }}
                     renderInput={(params) => <TextField {...params} label="Action" />}
@@ -135,26 +128,20 @@ testcase ${MakeCamel(testName)}() appstate VarsLoadedState
             </div>
             <Card id="card-container" ref={testStepRef}>
                 {
-                    testStep.map((value, index)=>{
+                    testSteps.map((value, index)=>{
+                        let i=0;
+                        let step = testSteps.filter(ts=> i++<=index && ts.isStep).length;
                         return (
-                            <Card id="card" key={index}>
-                                <Card.Header>
-                                    Step {index+1} 
-                                    <CloseButton id="close-button" onClick={()=>{removeTestStep(index)}}/>
-                                </Card.Header>
-                                <Card.Body className={`card-body`}>
-                                    <div>
-                                        {value.action}
-                                    </div>
-                                    <div>
-                                        {
-                                            value.code.split('\n').map(text=>{
-                                                return <p>{text}</p>
-                                            })
-                                        }
-                                    </div>
-                                </Card.Body>
-                            </Card>
+                            <TestStepCard 
+                                testStep={value} 
+                                index={index} 
+                                step={step}
+                                key={index} 
+                                length={testSteps.length}
+                                removeTestStep={removeTestStep}
+                                updateTestStep={updateTestStep}
+                                reorderTestStep={reorderTestStep}
+                            />
                         )
                         
                     })
