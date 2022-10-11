@@ -32,3 +32,9 @@ export interface TestResultViewModel{
     templateName:string,
     testCaseName:string,
 }
+
+export interface TestStep{
+    action:string,
+    code:string,
+    isStep?:boolean
+}

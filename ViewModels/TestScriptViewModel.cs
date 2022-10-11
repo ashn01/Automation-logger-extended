@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Automation_logger_extended.ViewModels
 {
-    public class TestCaseViewModel
+    public class TestScriptViewModel
     {
         [JsonProperty(PropertyName = "id")]
         public int Id { get; set; }

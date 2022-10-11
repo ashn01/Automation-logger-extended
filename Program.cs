@@ -25,6 +25,7 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<ITestScriptRepository, TestScriptRepository>();
 builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
 builder.Services.AddScoped<ITestResultRepository, TestResultRepository>();
+builder.Services.AddScoped<ITestStepRepository, TestStepRepository>();
 
 var app = builder.Build();
 
@@ -56,3 +57,7 @@ app.MapControllerRoute(
 //app.MapFallbackToFile("index.html"); ;
 
 app.Run();
+
+/*
+ *  After adding a controller, setupProxy.js also have to be updated
+ */

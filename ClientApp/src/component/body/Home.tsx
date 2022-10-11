@@ -10,7 +10,7 @@ import Testresult, {SearchTestresult} from './TestResult'
 
 import '../../css/home.css'
 
-import {TestCase, TestResultViewModel} from '../../interface/interface'
+import {TestCase} from '../../interface/interface'
 
 export default function Home() {
     const [testCases, setTestCases] = useState<Array<TestCase>>();
@@ -23,7 +23,7 @@ export default function Home() {
         console.log(`get ${tab}`)
         setIsDataLoaded(false)
         // get data
-        axios.post(`/api/testscript/${tab}`)
+        axios.get(`/api/testscript/${tab}`)
         .then((res=>{
             // console.log(res)
             setTestCases(res.data);
@@ -34,32 +34,32 @@ export default function Home() {
         })
     },[tab])
 
-    const InitBtn = () =>{
-        console.log("Init")
-        axios.get('/api/testscript/init').then((res => {
-            console.log(res)
-        }))
-        .catch(err=>{
-            console.log(err)
-        })
-    }
+    // const InitBtn = () =>{
+    //     console.log("Init")
+    //     axios.get('/api/testscript/init').then((res => {
+    //         console.log(res)
+    //     }))
+    //     .catch(err=>{
+    //         console.log(err)
+    //     })
+    // }
     
-    const testBtn = () =>{
-        console.log("hey")
-        let tr:TestResultViewModel = {
-            created: new Date(),
-            status:false,
-            templateName:"international",
-            testCaseName:"Automated Acceptance Test/Audit - Client Acceptance Part 1.t",
-            version:"25.00.103"
-        }
-        axios.put('/api/testresult', tr).then((res => {
-            console.log(res)
-        }))
-        .catch(err=>{
-            console.log(err)
-        })
-    }
+    // const testBtn = () =>{
+    //     console.log("hey")
+    //     let tr:TestResultViewModel = {
+    //         created: new Date(),
+    //         status:false,
+    //         templateName:"international",
+    //         testCaseName:"Automated Acceptance Test/Audit - Client Acceptance Part 1.t",
+    //         version:"25.00.103"
+    //     }
+    //     axios.put('/api/testresult', tr).then((res => {
+    //         console.log(res)
+    //     }))
+    //     .catch(err=>{
+    //         console.log(err)
+    //     })
+    // }
 
     const searchByTestcaseName = (value:string|null) =>{
         console.log(value)
@@ -99,7 +99,7 @@ export default function Home() {
             <div id="test-result-container">
                 <Tabs activeKey={tab} id="uncontrolled-tab" onSelect={(k)=>setTab(k?k:"international")}>
                     <Tab eventKey="international" title="International">
-                        {isSearch == false ? 
+                        {isSearch === false ? 
                         <Testresult testCases={testCases} dataLoaded={isDataLoaded}/> :
                         <SearchTestresult testCase={searched} dataLoaded={isDataLoaded}/>
                         }

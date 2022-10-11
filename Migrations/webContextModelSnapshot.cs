@@ -36,14 +36,14 @@ namespace Automation_logger_extended.Migrations
                     b.Property<int>("TemplateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TestCaseId")
+                    b.Property<int>("TestScriptId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TemplateId");
 
-                    b.HasIndex("TestCaseId");
+                    b.HasIndex("TestScriptId");
 
                     b.ToTable("Panels");
                 });
@@ -65,26 +65,6 @@ namespace Automation_logger_extended.Migrations
                     b.ToTable("Templates");
                 });
 
-            modelBuilder.Entity("Automation_logger_extended.Models.TestCase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TestCases");
-                });
-
             modelBuilder.Entity("Automation_logger_extended.Models.TestResult", b =>
                 {
                     b.Property<int>("Id")
@@ -102,7 +82,7 @@ namespace Automation_logger_extended.Migrations
                     b.Property<int>("TemplateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TestCaseId")
+                    b.Property<int>("TestScriptId")
                         .HasColumnType("int");
 
                     b.Property<string>("Version")
@@ -113,9 +93,50 @@ namespace Automation_logger_extended.Migrations
 
                     b.HasIndex("TemplateId");
 
-                    b.HasIndex("TestCaseId");
+                    b.HasIndex("TestScriptId");
 
                     b.ToTable("TestResults");
+                });
+
+            modelBuilder.Entity("Automation_logger_extended.Models.TestScript", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TestScripts");
+                });
+
+            modelBuilder.Entity("Automation_logger_extended.Models.TestStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TestSteps");
                 });
 
             modelBuilder.Entity("Automation_logger_extended.Models.Panel", b =>
@@ -126,15 +147,15 @@ namespace Automation_logger_extended.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Automation_logger_extended.Models.TestCase", "TestCase")
+                    b.HasOne("Automation_logger_extended.Models.TestScript", "TestScript")
                         .WithMany("Panels")
-                        .HasForeignKey("TestCaseId")
+                        .HasForeignKey("TestScriptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Template");
 
-                    b.Navigation("TestCase");
+                    b.Navigation("TestScript");
                 });
 
             modelBuilder.Entity("Automation_logger_extended.Models.TestResult", b =>
@@ -145,15 +166,15 @@ namespace Automation_logger_extended.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Automation_logger_extended.Models.TestCase", "TestCase")
+                    b.HasOne("Automation_logger_extended.Models.TestScript", "TestScript")
                         .WithMany("TestResults")
-                        .HasForeignKey("TestCaseId")
+                        .HasForeignKey("TestScriptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Template");
 
-                    b.Navigation("TestCase");
+                    b.Navigation("TestScript");
                 });
 
             modelBuilder.Entity("Automation_logger_extended.Models.Template", b =>
@@ -163,7 +184,7 @@ namespace Automation_logger_extended.Migrations
                     b.Navigation("TestResults");
                 });
 
-            modelBuilder.Entity("Automation_logger_extended.Models.TestCase", b =>
+            modelBuilder.Entity("Automation_logger_extended.Models.TestScript", b =>
                 {
                     b.Navigation("Panels");
 

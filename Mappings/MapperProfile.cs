@@ -8,7 +8,7 @@ namespace Automation_logger_extended.Mappings
     {
         public MapperProfile()
         {
-            CreateMap<TestScript, TestCaseViewModel>();
+            CreateMap<TestScript, TestScriptViewModel>();
         }
     }
 }
