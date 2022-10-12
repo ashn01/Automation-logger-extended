@@ -48,10 +48,12 @@ export default function Automator(){
     const addTestStep = (step:TestStep) =>{
         // TODO: adding test steps
         const newArray = [...testSteps];
-        step.isStep = true; // step by default
-        step.alteredCode = step.code;
+        let newStep = JSON.parse(JSON.stringify(step));
 
-        newArray.push(step);
+        newStep.isStep = true; // step by default
+        newStep.alteredCode = newStep.code;
+
+        newArray.push(newStep);
         setTestSteps(newArray);
     }
 
@@ -73,9 +75,11 @@ export default function Automator(){
 
     // should be called when a test step need to be updated
     const updateTestStep = (index:number, testStep:TestStep) =>{
+        console.log(index)
         // console.log(index, testStep.isStep)
         const newArray = [...testSteps];
         newArray[index]=testStep;
+        console.log(newArray)
         setTestSteps(newArray);
     }
 
@@ -124,7 +128,7 @@ export default function Automator(){
                                 testStep={value} 
                                 index={index} 
                                 step={step}
-                                key={index} 
+                                key={`step-card-${index}`} 
                                 length={testSteps.length}
                                 removeTestStep={removeTestStep}
                                 updateTestStep={updateTestStep}

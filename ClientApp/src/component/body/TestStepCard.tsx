@@ -22,6 +22,7 @@ export default function TestStepCard(props:{
 
     useEffect(()=>{
         console.log("trigger")
+        console.log(props)
     },[props.testStep])
 
     const onChangeStep = (isStep:boolean|undefined) =>{
@@ -81,7 +82,7 @@ export default function TestStepCard(props:{
                             props.testStep.testActionValues.map((value,key)=>{
                                 return(
                                     <TextField
-                                        key={key}
+                                        key={`param-${key}`}
                                         value={value.defaultValue}
                                         label={value.name}
                                         onChange={e=>onChangeActionValue(e.target.value, key)}
