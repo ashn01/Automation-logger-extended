@@ -1,5 +1,7 @@
-﻿using Automation_logger_extended.Data.Repositories;
+﻿using AutoMapper;
+using Automation_logger_extended.Data.Repositories;
 using Automation_logger_extended.Models;
+using Automation_logger_extended.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +12,13 @@ namespace Automation_logger_extended.Controllers
     public class TestStepController : ControllerBase
     {
         private readonly ITestStepRepository _testStepRepository;
+        private IMapper _mapper;
 
-        public TestStepController(ITestStepRepository testStepRepository)
+        public TestStepController(ITestStepRepository testStepRepository,
+                                  IMapper mapper)
         {
             _testStepRepository = testStepRepository;
+            _mapper = mapper;
         }
 
 
@@ -35,11 +40,12 @@ namespace Automation_logger_extended.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddNewAction([FromBody]TestStep newAction)
+        public IActionResult AddNewAction([FromBody]TestStepViewModel newAction)
         {
             try
             {
-                _testStepRepository.Create(newAction);
+                var action = _mapper.Map<TestStep>(newAction);
+                _testStepRepository.Create(action);
                 _testStepRepository.SaveChanges();
 
                 var actions = _testStepRepository.GetAllTestStep();

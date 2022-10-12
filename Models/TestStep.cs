@@ -8,7 +8,6 @@ namespace Automation_logger_extended.Models
 {
     public class TestStep
     {
-        // two primary keys
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -17,5 +16,6 @@ namespace Automation_logger_extended.Models
         public string Action { get; set; }
         public string Code { get; set; }
         // relationship
+        public ICollection<TestActionValue>? TestActionValues { get; set; }
     }
 }
