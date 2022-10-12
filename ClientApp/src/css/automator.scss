@@ -45,7 +45,15 @@
             .card-body{
                 display: flex;
                 flex-direction: row;
-                div{
+                #card-action-container{
+                    width: 50%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    #param-id{
+                    }
+                }
+                #card-script-container{
                     width: 50%;
                 }
             }

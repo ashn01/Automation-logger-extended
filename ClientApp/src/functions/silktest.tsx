@@ -12,8 +12,9 @@ const addTabs = ():string =>{
     return script;
 }
 
-const beautifyCode = (code:string):string =>{
+const beautifyCode = (code:string, step:TestStep):string =>{
     let ret = code.replace('\n',addTabs()) 
+    ret = replaceParams(ret, step);
     return ret
 }
 
@@ -27,7 +28,7 @@ export const generateTestSteps = (teststeps:TestStep[]):string =>{
         
         // adding actual script
         script += `${addTabs()}`
-        script += `${beautifyCode(step.code)}`
+        script += `${beautifyCode(step.code, step)}`
         
         // adding a space between steps
         script += `${addTabs()}`
@@ -61,4 +62,41 @@ testcase ${MakeCamel(testName)}() appstate VarsLoadedState
         // console.log(script)
 
     return script
+}
+
+const replaceParams = (text:string, testStep:TestStep):string =>{
+    let newText = text
+    let actionValueIndex = 0;
+
+    // if found parameter delimiter
+    if (text.indexOf('#p') !== -1){
+        const newArray = text.split('#p');
+        // console.log(newArray)
+        newText = ``
+        newArray.forEach((t,index)=>{
+            newText += t;
+            if (index < newArray.length -1)
+            {
+                newText += testStep.testActionValues&&
+                    testStep.testActionValues[actionValueIndex]&&
+                    testStep.testActionValues[actionValueIndex].defaultValue;
+
+                actionValueIndex++;
+            }
+        })
+    }
+
+    return newText
+}
+
+export const refineScript = (testStep:TestStep):JSX.Element[] =>{
+
+    let value = testStep.code.split('\n').map(text => {
+        let newText = replaceParams(text, testStep);
+        return <p>{
+            newText
+            }</p>
+    })
+
+    return value
 }

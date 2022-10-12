@@ -1,11 +1,14 @@
-import { useEffect } from "react";
-import { IconButton, Switch } from "@mui/material";
+import { useEffect, useState } from "react";
+import { IconButton, Switch, TextField } from "@mui/material";
 import { Card, CloseButton } from "react-bootstrap";
-import { TestStep } from "../../interface/interface";
+import { TestActionValue, TestStep } from "../../interface/interface";
 import ArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import ArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import { refineScript } from "../../functions/silktest";
 
 import '../../css/automator.scss'
+
+
 export default function TestStepCard(props:{
     testStep:TestStep,  // testStep contains action, code, and step 
     index:number, // current index of this test step
@@ -15,10 +18,10 @@ export default function TestStepCard(props:{
     updateTestStep:(index:number, testStep:TestStep)=>void, // to update current test step, call parents funciton
     reorderTestStep:(index:number, newIndex:number)=>void // to reorder current test step, call parents funciton
 }){
-    // const [testStep, setTestStep] = useState<TestStep>(props.testStep);
+    // const [testActionValues, setTestActionValues] = useState<Array<TestActionValue>>(props.testStep.testActionValues||[]);
 
     useEffect(()=>{
-        // console.log("trigger")
+        console.log("trigger")
     },[props.testStep])
 
     const onChangeStep = (isStep:boolean|undefined) =>{
@@ -27,6 +30,25 @@ export default function TestStepCard(props:{
             newTestStep.isStep = !newTestStep.isStep; 
             // setTestStep(newTestStep);
             props.updateTestStep(props.index, newTestStep)
+        }
+    }
+
+    const onChangeActionValue = (value:string, index:number) =>{
+        const newActionValues = props.testStep.testActionValues;
+
+        // change action params
+        if(newActionValues !== undefined){
+            // update props
+            newActionValues[index].defaultValue = value;
+    
+            const newTestStep = props.testStep;
+            newTestStep.testActionValues = newActionValues;
+
+            // update altered code
+            
+
+            props.updateTestStep(props.index, newTestStep);
+            // console.log(newActionValues)
         }
     }
 
@@ -49,14 +71,29 @@ export default function TestStepCard(props:{
                 </div>
             </Card.Header>
             <Card.Body className={`card-body`}>
-                <div>
-                    {props.testStep.action}
+                <div id={`card-action-container`}>
+                    <div id={`card-action`}>
+                        {props.testStep.action}
+                    </div>
+                    <div id={`card-params`}>
+                        {
+                            props.testStep.testActionValues&&
+                            props.testStep.testActionValues.map((value,key)=>{
+                                return(
+                                    <TextField
+                                        key={key}
+                                        value={value.defaultValue}
+                                        label={value.name}
+                                        onChange={e=>onChangeActionValue(e.target.value, key)}
+                                    />
+                                )
+                            })
+                        }
+                    </div>
                 </div>
-                <div>
+                <div id={`card-script-container`}>
                     {
-                        props.testStep.code.split('\n').map(text => {
-                            return <p>{text}</p>
-                        })
+                        refineScript(props.testStep)
                     }
                 </div>
             </Card.Body>

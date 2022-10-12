@@ -6,5 +6,9 @@ div.MuiDialogContent-root{
         display: flex;
         flex-direction: column;
         gap: 10px;
+        #action-params{
+            display: flex;
+            justify-content: space-between;
+        }
     }
 }

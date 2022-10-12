@@ -7,6 +7,7 @@ import '../../css/automator.scss'
 import { generateScript } from '../../functions/silktest';
 import { TestStep } from '../../interface/interface';
 import AlertDialog from './AlertDialog';
+import NewActionDialog from './NewActionDialog';
 import TestStepCard from './TestStepCard';
 
 export default function Automator(){
@@ -22,37 +23,39 @@ export default function Automator(){
     const [testScript, setTestScript] = useState<string>('');
     // add action dialog. this is a trigger to open the dialog
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-    // new action
-    const [newAction, setNewAction] = useState<string>('');
-    // new action script
-    const [newActionScript, setNewActionScript] = useState<string>('');
 
-    const testStepRef = useRef(null);
 
+    // when: once loaded
     useEffect(()=>{
         // TODO: get actions from db
         axios.get(`/api/teststep`)
         .then(res=>{
-            setTestActions(res.data)
+            updateTestActions(res.data)
             // console.log(res.data)
         })
         .catch(err=>{
             console.log(err)
         })
-    },[testSteps.length])
+    },[])
+
+    // to update test actions in auto complete field
+    // should be called whenever gets test actions from the server
+    const updateTestActions = (testActions:Array<TestStep>) =>{
+        setTestActions(testActions)
+    }
     
+    // should be called when user select a test action in the auto complete field
     const addTestStep = (step:TestStep) =>{
         // TODO: adding test steps
         const newArray = [...testSteps];
         step.isStep = true; // step by default
+        step.alteredCode = step.code;
+
         newArray.push(step);
         setTestSteps(newArray);
-        // console.log(step)
-        // for(let i=0;i<step.code.length;i++){
-        //     console.log(step.code[i], step.code.charCodeAt(i))
-        // }
     }
 
+    // should be called when user changes test steps' order
     const reorderTestStep = (index:number, newIndex:number) =>{
         // TODO: reordering test steps
         const newArray = [...testSteps];
@@ -60,6 +63,7 @@ export default function Automator(){
         setTestSteps(newArray);
     }
 
+    // should be called when user delete a test step
     const removeTestStep = (index:number) =>{
         // TODO: removing test steps
         const newArray = [...testSteps];
@@ -67,28 +71,12 @@ export default function Automator(){
         setTestSteps(newArray);
     }
 
+    // should be called when a test step need to be updated
     const updateTestStep = (index:number, testStep:TestStep) =>{
         // console.log(index, testStep.isStep)
         const newArray = [...testSteps];
         newArray[index]=testStep;
         setTestSteps(newArray);
-    }
-
-    const addTestAction = () =>{
-        console.log(newAction)
-        console.log(newActionScript)
-        const newTestAction:TestStep = {
-            action: newAction,
-            code: newActionScript
-        }
-        axios.post(`/api/teststep`,newTestAction)
-        .then(res=>{
-            setTestActions(res.data)
-            setDialogOpen(false)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
     }
 
     // generate test case
@@ -126,7 +114,7 @@ export default function Automator(){
                 <TextField label="Testcase ID" variant="outlined" onChange={e=>setTestID(e.target.value)}/>
                 <TextField label="Testcase Name" variant="outlined" onChange={e=>setTestName(e.target.value)}/>
             </div>
-            <Card id="card-container" ref={testStepRef}>
+            <Card id="card-container" >
                 {
                     testSteps.map((value, index)=>{
                         let i=0;
@@ -158,32 +146,10 @@ export default function Automator(){
                     value={testScript}
                 />
             </div>
-            <AlertDialog 
+            <NewActionDialog 
                 open={dialogOpen} 
                 setOpen={setDialogOpen} 
-                title={`New test action`}
-                contents={
-                    <div id="alert-contents">
-                        <TextField 
-                            style={{width:'500px'}}
-                            label="Action" 
-                            variant="outlined" 
-                            onChange={e=>setNewAction(e.target.value)}
-                        />
-                        <TextField
-                            label="Script"
-                            multiline
-                            minRows={4}
-                            maxRows={10}
-                            onChange={e=>setNewActionScript(e.target.value)}
-                        />
-                    </div>
-                }
-                button={
-                    <Button 
-                        onClick={addTestAction}
-                    >Submit</Button>
-                }
+                updateTestAction={updateTestActions}
             />
         </div>
     )
