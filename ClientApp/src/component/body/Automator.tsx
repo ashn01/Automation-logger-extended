@@ -92,6 +92,11 @@ export default function Automator(){
         setTestScript(script);
     }
 
+    // clear all test steps
+    const clear = () =>{
+        setTestSteps([])
+    }
+
     return (
         <div id="automator-container">
             <div id="auto-complete-container">
@@ -141,6 +146,7 @@ export default function Automator(){
             </Card>
             <div id="generate-btn-container">
                 <Button id="generate-btn" onClick={generate}>Generate</Button>
+                <Button id="clear-btn" onClick={clear}>Clear</Button>
             </div>
             <div id="generated-script-container">
                 <TextField
