@@ -5,7 +5,6 @@ export let indentLevel = 2; // default is 2
 
 const addTabs = ():string =>{
     let script = ``
-    script += `\n`
     for(let i = 0;i<indentLevel;i++){
         script += `\t`
     }
@@ -13,9 +12,14 @@ const addTabs = ():string =>{
 }
 
 const beautifyCode = (code:string, step:TestStep):string =>{
-    let ret = code.replace('\n',addTabs()) 
-    ret = replaceParams(ret, step);
-    return ret
+    let script = ``
+    const newArray = code.split('\n').map(text=>{
+        script += `\n${addTabs()}`;
+        script += text;
+    })
+
+    script = replaceParams(script, step);
+    return script
 }
 
 export const generateTestSteps = (teststeps:TestStep[]):string =>{
@@ -23,12 +27,12 @@ export const generateTestSteps = (teststeps:TestStep[]):string =>{
     let stepCnt = 1;
     teststeps.forEach(step=>{
         // adding step comment
-        script += `${addTabs()}`
+        script += `\n${addTabs()}`
         script += step.isStep ? `// step ${stepCnt++}` : ``
         
         // adding actual script
         script += `${addTabs()}`
-        script += `${beautifyCode(step.code, step)}`
+        script += `${beautifyCode(step.code, step)}\n`
         
         // adding a space between steps
         script += `${addTabs()}`
