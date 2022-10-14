@@ -9,6 +9,10 @@ namespace Automation_logger_extended.Mappings
         public MapperProfile()
         {
             CreateMap<TestScript, TestScriptViewModel>();
+            CreateMap<TestStep, TestStepViewModel>();
+            CreateMap<TestStepViewModel, TestStep>();
+            CreateMap<TestActionValueViewModel, TestActionValue>();
+            CreateMap<TestActionValue, TestActionValueViewModel>();
         }
     }
 }

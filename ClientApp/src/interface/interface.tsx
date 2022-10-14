@@ -34,7 +34,18 @@ export interface TestResultViewModel{
 }
 
 export interface TestStep{
+    id?:number,
     action:string,
     code:string,
+    alteredCode?:string,
+    testActionValues?:Array<TestActionValue>,
     isStep?:boolean
+}
+
+export interface TestActionValue{
+    id?:number,
+    name:string,
+    defaultValue:string,
+    order:number,
+    testStepId?:number
 }

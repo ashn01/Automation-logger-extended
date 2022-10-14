@@ -17,7 +17,18 @@ namespace Automation_logger_extended.Data.Repositories
 
         public IEnumerable<TestStep> GetAllTestStep()
         {
-            IEnumerable<TestStep> entities = _webContext.TestSteps.ToList();
+            IEnumerable<TestStep> entities = _webContext.TestSteps
+                .Select(testStep => new TestStep
+                {
+                    Id = testStep.Id,
+                    Action = testStep.Action,
+                    Code = testStep.Code,
+                    TestActionValues = testStep.TestActionValues.Where(testActionValue=>
+                        testActionValue.TestStepId == testStep.Id)
+                    .OrderBy(testActionValue => testActionValue.Order)
+                    .ToList()
+                })
+                .ToList();
 
             return entities;
         }

@@ -45,7 +45,24 @@
             .card-body{
                 display: flex;
                 flex-direction: row;
-                div{
+                #card-action-container{
+                    width: 50%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    #card-params{
+                        display: flex;
+                        gap: 10px;
+                        flex-wrap: wrap;
+                        div.MuiTextField-root{
+                            width: 40%;
+                            min-width: 200px;
+                        }
+                    }
+                    #param-id{
+                    }
+                }
+                #card-script-container{
                     width: 50%;
                 }
             }
@@ -55,6 +72,8 @@
     #generate-btn-container{
         width: 100%;
         margin: 20px 0px;
+        display: flex;
+        gap: 10px;
     }
     #generated-script-container{
         width: 100%;

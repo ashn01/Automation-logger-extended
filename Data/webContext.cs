@@ -13,8 +13,9 @@ namespace Automation_logger_extended.Data
         public DbSet<Template> Templates { get; set; }
         public DbSet<TestScript> TestScripts { get; set; }
         public DbSet<TestResult> TestResults { get; set; }
-        public DbSet<Panel> Panels { get; set; } 
+        public DbSet<Panel> Panels { get; set; }
         public DbSet<TestStep> TestSteps { get; set; }
+        public DbSet<TestActionValue> TestActionValues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -38,16 +39,22 @@ namespace Automation_logger_extended.Data
 
 
             builder.Entity<Template>()
-                .HasMany<Panel>(panel => panel.Panels) // Template contains many TestResults
+                .HasMany<Panel>(template => template.Panels) // Template contains many TestResults
                 .WithOne(panel => panel.Template) // testTestResultResult has one Template
                 .HasForeignKey(panel => panel.TemplateId) // TestResult has a foreignKey
                 .IsRequired(); // is required
 
             builder.Entity<TestScript>()
-                .HasMany<Panel>(panel => panel.Panels) // TestScript contains many TestResults
+                .HasMany<Panel>(testScript => testScript.Panels) // TestScript contains many TestResults
                 .WithOne(panel => panel.TestScript) // TestResult has one TestScript
                 .HasForeignKey(panel => panel.TestScriptId) // TestResult has a foreignKey
                 .IsRequired(); // is required
+
+            builder.Entity<TestStep>()
+                .HasMany<TestActionValue>(testStep => testStep.TestActionValues)
+                .WithOne(testActionValue => testActionValue.TestStep)
+                .HasForeignKey(testActionValue => testActionValue.TestStepId)
+                .IsRequired();
         }
     }
 }
