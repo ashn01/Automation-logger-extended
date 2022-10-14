@@ -95,6 +95,7 @@ export default function Automator(){
     // clear all test steps
     const clear = () =>{
         setTestSteps([])
+        setTestScript('');
     }
 
     return (
@@ -147,6 +148,9 @@ export default function Automator(){
             <div id="generate-btn-container">
                 <Button id="generate-btn" onClick={generate}>Generate</Button>
                 <Button id="clear-btn" onClick={clear}>Clear</Button>
+                <Button id="clear-btn" 
+                    onClick={()=>navigator.clipboard.writeText(testScript)}
+                >Copy to clipboard</Button>
             </div>
             <div id="generated-script-container">
                 <TextField
