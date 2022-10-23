@@ -82,7 +82,7 @@ export default function TestStepCard(props:{
                             props.testStep.testActionValues.map((value,key)=>{
                                 return(
                                     <TextField
-                                        key={`param-${key}`}
+                                        key={`step-param-${key}`}
                                         value={value.defaultValue}
                                         label={value.name}
                                         onChange={e=>onChangeActionValue(e.target.value, key)}

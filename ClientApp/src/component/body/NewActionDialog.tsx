@@ -2,7 +2,7 @@ import { DialogActions, DialogContent, DialogTitle, TextField } from '@mui/mater
 import Dialog from '@mui/material/Dialog';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, CloseButton } from 'react-bootstrap';
 
 
 import '../../css/Dialog.scss'
@@ -72,6 +72,12 @@ export default function NewActionDialog (
         setNewTestActionValues(newArray)
     }
 
+    const removeActionParam = (index:number) =>{
+        const newArray = [...newTestActionValues];
+        newArray.splice(index,1);
+        setNewTestActionValues(newArray);
+    }
+
     return (
         <Dialog
             open={props.open}
@@ -98,19 +104,23 @@ export default function NewActionDialog (
                         {
                             newTestActionValues.map((action, key)=>{
                                 return (
-                                    <div id={`action-params`}>
+                                    <div id={`add-action-params`}>
                                         <TextField
-                                                key={`name-${key}`}
+                                                key={`add-name-${key}`}
                                                 label={`Name`}
                                                 value={action.name}
                                                 onChange={e=>onChangeActionName(e.target.value,key)}
                                             />
                                         <TextField
-                                                key={`value-${key}`}
+                                                key={`add-value-${key}`}
                                                 label={`Default value`}
                                                 value={action.defaultValue}
                                                 onChange={e=>onChangeActionValue(e.target.value,key)}
                                             />
+                                        <CloseButton 
+                                            id="close-button" 
+                                            onClick={() => removeActionParam(key)} 
+                                        />
                                     </div>
                                 )
                             })

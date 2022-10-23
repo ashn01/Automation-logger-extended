@@ -58,5 +58,33 @@ namespace Automation_logger_extended.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut]
+        public IActionResult ModifyAction([FromBody] TestStepViewModel newAction)
+        {
+            try
+            {
+                TestStep action = _mapper.Map<TestStep>(newAction);
+
+                TestStep? tsStep = _testStepRepository.UpdateTestStep(action);
+                if (tsStep != null)
+                {
+                    TestStepViewModel tsModified = _mapper.Map<TestStepViewModel>(tsStep);
+                    return Ok(tsModified);
+                }
+                else
+                {
+                    return BadRequest("ID NOT FOUND");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }
