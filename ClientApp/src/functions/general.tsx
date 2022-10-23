@@ -3,3 +3,7 @@ export const MakeCamel = (name:string):string => {
         return word.toUpperCase();
       }).replace(/\s+/g, '');
 }
+
+export const RemoveSpecialCharacters = (str:string):string =>{
+  return str.replace(/[^a-zA-Z ]/g, "");
+}

@@ -1,5 +1,5 @@
 import { TestStep } from "../interface/interface";
-import { MakeCamel } from "./general";
+import { MakeCamel, RemoveSpecialCharacters } from "./general";
 
 export let indentLevel = 2; // default is 2
 
@@ -43,8 +43,10 @@ export const generateTestSteps = (teststeps:TestStep[]):string =>{
 
 
 export const generateScript = (testID:string, testName:string, testStep:TestStep[]):string => {
+    let cameledName = MakeCamel(testName)
+    let testCaseName = RemoveSpecialCharacters(cameledName);
     let script = `// ${testID}
-testcase ${MakeCamel(testName)}() appstate VarsLoadedState
+testcase ${testCaseName}() appstate VarsLoadedState
 \tSTRING sTestcaseId = "${testID}"
 \tLOGGER.testresult("${testName}", R_SUBTITLE, sTestcaseId)
 \t
