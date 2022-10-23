@@ -51,10 +51,23 @@ export default function Automator(){
         const newArray = [...testSteps];
         let newStep = JSON.parse(JSON.stringify(step));
 
-        newStep.isStep = true; // step by default
+        newStep.isStep = false; // step by default
         newStep.alteredCode = newStep.code;
 
         newArray.push(newStep);
+        setTestSteps(newArray);
+    }
+
+    // to add test step at specified index
+    const addTestStepAt = (index:number, step:TestStep) =>{
+        // TODO: adding test steps
+        const newArray = [...testSteps];
+        let newStep = JSON.parse(JSON.stringify(step));
+
+        newStep.isStep = false; // step by default
+        newStep.alteredCode = newStep.code;
+
+        newArray.splice(index,0,newStep);
         setTestSteps(newArray);
     }
 
@@ -76,7 +89,6 @@ export default function Automator(){
 
     // should be called when a test step need to be updated
     const updateTestStep = (index:number, testStep:TestStep) =>{
-        console.log(index)
         // console.log(index, testStep.isStep)
         const newArray = [...testSteps];
         newArray[index]=testStep;
@@ -153,6 +165,7 @@ export default function Automator(){
                                 removeTestStep={removeTestStep}
                                 updateTestStep={updateTestStep}
                                 reorderTestStep={reorderTestStep}
+                                duplicateTestStep={addTestStepAt}
                             />
                         )
                         
