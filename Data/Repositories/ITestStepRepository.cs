@@ -6,5 +6,7 @@ namespace Automation_logger_extended.Data.Repositories
     {
         Task Create(TestStep testStep);
         IEnumerable<TestStep> GetAllTestStep();
+        TestStep? GetTestStep(int id);
+        TestStep? UpdateTestStep(TestStep updatedStep);
     }
 }

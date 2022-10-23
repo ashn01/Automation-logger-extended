@@ -6,7 +6,7 @@ import {Button, Card} from 'react-bootstrap'
 import '../../css/automator.scss'
 import { generateScript } from '../../functions/silktest';
 import { TestStep } from '../../interface/interface';
-import AlertDialog from './AlertDialog';
+import ModifyActionDialog from './ModifyActionDialog';
 import NewActionDialog from './NewActionDialog';
 import TestStepCard from './TestStepCard';
 
@@ -22,8 +22,9 @@ export default function Automator(){
     // generated script that actual silk test script
     const [testScript, setTestScript] = useState<string>('');
     // add action dialog. this is a trigger to open the dialog
-    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-
+    const [newDialogOpen, setNewDialogOpen] = useState<boolean>(false);
+    // modify action dialog.
+    const [modifyDialogOpen, setModifyDialogOpen] = useState<boolean>(false);
 
     // when: once loaded
     useEffect(()=>{
@@ -117,8 +118,9 @@ export default function Automator(){
                     }}
                 />
             </div>
-            <div id="add-test-action-btn-container">
-                <Button onClick={()=>setDialogOpen(true)}>Add new action</Button>
+            <div id="test-action-btn-container">
+                <Button onClick={()=>setNewDialogOpen(true)}>Add new action</Button>
+                <Button onClick={()=>setModifyDialogOpen(true)}>Modify action</Button>
             </div>
             <div id="test-case-name-container">
                 <TextField label="Testcase ID" variant="outlined" onChange={e=>setTestID(e.target.value)}/>
@@ -161,9 +163,14 @@ export default function Automator(){
                 />
             </div>
             <NewActionDialog 
-                open={dialogOpen} 
-                setOpen={setDialogOpen} 
+                open={newDialogOpen} 
+                setOpen={setNewDialogOpen} 
                 updateTestAction={updateTestActions}
+            />
+            <ModifyActionDialog 
+                open={modifyDialogOpen} 
+                setOpen={setModifyDialogOpen} 
+                testActions={testActions}
             />
         </div>
     )

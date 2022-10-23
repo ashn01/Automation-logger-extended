@@ -11,8 +11,11 @@
         }
     }
 
-    #add-test-action-btn-container{
+    #test-action-btn-container{
         margin: 0 0 20px 0;
+        gap: 10px;
+        display: flex;
+        flex-direction: row;
     }
 
     #test-case-name-container{
