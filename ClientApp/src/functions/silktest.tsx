@@ -15,6 +15,7 @@ const beautifyCode = (code:string, step:TestStep):string =>{
     let index = {index : 0}
     let script = ``
     const newArray = code.split('\n').map(text=>{
+        console.log(text)
         script += `\n${addTabs()}`;
         script += text;
     })
@@ -28,15 +29,17 @@ export const generateTestSteps = (teststeps:TestStep[]):string =>{
     let stepCnt = 1;
     teststeps.forEach(step=>{
         // adding step comment
-        script += `\n${addTabs()}`
-        script += step.isStep ? `// step ${stepCnt++}` : ``
+        if(step.isStep){
+            if(stepCnt != 1){ // if step is 1, skip spacing
+                script += `\n${addTabs()}`
+            }
+            script += `\n${addTabs()}`
+            script += `// step ${stepCnt++}`
+        }
         
         // adding actual script
-        script += `${addTabs()}`
-        script += `${beautifyCode(step.code, step)}\n`
+        script += `${beautifyCode(step.code, step)}`
         
-        // adding a space between steps
-        script += `${addTabs()}`
     })
     return script
 }
