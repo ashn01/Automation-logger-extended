@@ -97,6 +97,8 @@ export default function Automator(){
     const clear = () =>{
         setTestSteps([])
         setTestScript('');
+        setTestID('');
+        setTestName('');
     }
 
     return (
@@ -123,8 +125,18 @@ export default function Automator(){
                 <Button onClick={()=>setModifyDialogOpen(true)}>Modify action</Button>
             </div>
             <div id="test-case-name-container">
-                <TextField label="Testcase ID" variant="outlined" onChange={e=>setTestID(e.target.value)}/>
-                <TextField label="Testcase Name" variant="outlined" onChange={e=>setTestName(e.target.value)}/>
+                <TextField 
+                    label="Testcase ID" 
+                    variant="outlined" 
+                    value={testID}
+                    onChange={e=>setTestID(e.target.value)}
+                />
+                <TextField 
+                    label="Testcase Name" 
+                    variant="outlined"
+                    value={testName}
+                    onChange={e=>setTestName(e.target.value)}
+                />
             </div>
             <Card id="card-container" >
                 {
