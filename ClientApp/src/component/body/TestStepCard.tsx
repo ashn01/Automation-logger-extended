@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { IconButton, Switch, TextField } from "@mui/material";
+import { Button, ButtonGroup, IconButton, Switch, TextField } from "@mui/material";
 import { Card, CloseButton } from "react-bootstrap";
 import { TestActionValue, TestStep } from "../../interface/interface";
 import ArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import ArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { refineScript } from "../../functions/silktest";
 
 import '../../css/automator.scss'
@@ -16,12 +17,10 @@ export default function TestStepCard(props:{
     length:number, // full length of the test steps require to disable move up or down arrow
     removeTestStep:(index:number)=>void, // to remove current test step, call parents funciton
     updateTestStep:(index:number, testStep:TestStep)=>void, // to update current test step, call parents funciton
-    reorderTestStep:(index:number, newIndex:number)=>void // to reorder current test step, call parents funciton
+    reorderTestStep:(index:number, newIndex:number)=>void, // to reorder current test step, call parents funciton
+    duplicateTestStep:(index:number, testStep:TestStep)=>void
 }){
-    // const [testActionValues, setTestActionValues] = useState<Array<TestActionValue>>(props.testStep.testActionValues||[]);
-
     useEffect(()=>{
-        console.log("trigger")
         console.log(props)
     },[props.testStep])
 
@@ -62,13 +61,18 @@ export default function TestStepCard(props:{
                     onChange={()=>onChangeStep(props.testStep.isStep)} />
                 </div>
                 <div>
-                    <IconButton onClick={()=>props.reorderTestStep(props.index,props.index-1)} disabled={props.index === 0}>
-                        <ArrowUp fontSize="inherit"/>
-                    </IconButton>
-                    <IconButton onClick={()=>props.reorderTestStep(props.index,props.index+1)} disabled={props.index+1 === props.length}>
-                        <ArrowDown fontSize="inherit"/>
-                    </IconButton>
-                    <CloseButton id="close-button" onClick={() => { props.removeTestStep(props.index) }} />
+                    <ButtonGroup variant="text" aria-label="outlined primary button group">
+                        <IconButton onClick={()=>props.duplicateTestStep(props.index+1, props.testStep)}>
+                            <ContentCopyIcon fontSize="inherit"/>
+                        </IconButton>
+                        <IconButton onClick={()=>props.reorderTestStep(props.index,props.index-1)} disabled={props.index === 0}>
+                            <ArrowUp fontSize="inherit"/>
+                        </IconButton>
+                        <IconButton onClick={()=>props.reorderTestStep(props.index,props.index+1)} disabled={props.index+1 === props.length}>
+                            <ArrowDown fontSize="inherit"/>
+                        </IconButton>
+                        <CloseButton id="close-button" onClick={() => { props.removeTestStep(props.index) }} />
+                    </ButtonGroup>
                 </div>
             </Card.Header>
             <Card.Body className={`card-body`}>
