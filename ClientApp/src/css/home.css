@@ -7,10 +7,19 @@
 }
 
 #auto-complete-container {
-    margin: 0 0 30px 30px;
+    margin: 30px;
 }
 
 #test-result-container{
     margin: 0 30px 30px 30px;
 
+}
+
+.test-result-category{
+    position: sticky;
+    background-color: royalblue;
+}
+
+.test-result-category-children{
+    padding: 0;
 }
