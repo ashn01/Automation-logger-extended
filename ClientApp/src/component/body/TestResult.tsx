@@ -35,7 +35,8 @@ const StyledTableRow = styled(TableRow)(({theme})=>({
 export default function Testresult(props:
     {
         testCases:Array<TestCase>|undefined,
-        dataLoaded:boolean
+        dataLoaded:boolean,
+        onClickResult:(value:string|null)=>void
     })
     {
 
@@ -67,7 +68,7 @@ export default function Testresult(props:
                                     )
                                 }
                                 return(
-                                    <StyledTableRow key={key}>
+                                    <StyledTableRow key={key} onClick={()=>props.onClickResult(test.name)}>
                                         <TableCell>{key + 1}</TableCell>
                                         <TableCell>{test.name}</TableCell>
                                         <TableCell className={`${test.testResults.length > 0 && props.dataLoaded ? (test.testResults[0].status === true ? "pass" : "fail") : "na"}`}>{test.testResults.length > 0 && props.dataLoaded ? (test.testResults[0].status === true ? "PASS" : "FAIL") : "N/A"}</TableCell>

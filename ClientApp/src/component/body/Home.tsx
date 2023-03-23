@@ -18,6 +18,7 @@ export default function Home() {
     const [tab, setTab] = useState<string>('international');
     const [isDataLoaded,setIsDataLoaded] = useState<boolean>(false);
     const [isSearch, setIsSearch] = useState<boolean>(false);
+    const [autoName, setAutoName] = useState<string|null>(null);
 
     useEffect(()=>{
         console.log(`get ${tab}`)
@@ -33,6 +34,10 @@ export default function Home() {
             console.log(err)
         })
     },[tab])
+
+    useEffect(()=>{
+        searchByTestcaseName(autoName);
+    },[autoName])
 
     // const InitBtn = () =>{
     //     console.log("Init")
@@ -89,26 +94,35 @@ export default function Home() {
                     disablePortal
                     id="auto-complete"
                     options={testCases?testCases.map((option)=>option.name):[]}
-                    sx={{ width: 700 }}
-                    renderInput={(params) => <TextField {...params} label="Test cases" />}
+                    sx={{ width: '100%' }}
+                    renderInput={(params) => <TextField {...params} label="Test cases"/>}
                     onChange={(event:any, newValue:string|null)=>{
-                        searchByTestcaseName(newValue)
+                        setAutoName(newValue);
+                        // searchByTestcaseName(newValue)
                     }}
+                    value={autoName}
+                    groupBy={(groupOption)=>groupOption.substring(0,groupOption.indexOf(`/`))}
+                    renderGroup={(params) => (
+                        <li key={params.key}>
+                          <div className='test-result-category'>{params.group}</div>
+                          <ul className='test-result-category-children'>{params.children}</ul>
+                        </li>
+                    )}
                 />
             </div>
             <div id="test-result-container">
                 <Tabs activeKey={tab} id="uncontrolled-tab" onSelect={(k)=>setTab(k?k:"international")}>
                     <Tab eventKey="international" title="International">
                         {isSearch === false ? 
-                        <Testresult testCases={testCases} dataLoaded={isDataLoaded}/> :
+                        <Testresult testCases={testCases} dataLoaded={isDataLoaded} onClickResult={setAutoName}/> :
                         <SearchTestresult testCase={searched} dataLoaded={isDataLoaded}/>
                         }
                     </Tab>
                     <Tab eventKey="us" title="US">
-                        <Testresult testCases={testCases} dataLoaded={isDataLoaded}/>
+                        <Testresult testCases={testCases} dataLoaded={isDataLoaded} onClickResult={setAutoName}/>
                     </Tab>
                     <Tab eventKey="system" title="System">
-                        <Testresult testCases={testCases} dataLoaded={isDataLoaded}/>
+                        <Testresult testCases={testCases} dataLoaded={isDataLoaded} onClickResult={setAutoName}/>
                     </Tab>
                 </Tabs>
             </div>
