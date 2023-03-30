@@ -5,3 +5,14 @@
 .MuiTableRow-root{
     cursor: pointer;
 }
+
+.chart-container{
+    width: 80%;
+    margin: 0 auto;
+}
+
+.MuiTableBody-root{
+    tr:nth-child(odd){
+        background-color: #EEEEEE !important;
+    }
+}

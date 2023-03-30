@@ -14,7 +14,8 @@ export interface TestCase{
     name:string,
     testResults:Array<TestResult>,
     recentPass?:TestResult,
-    recentFail?:TestResult
+    recentFail?:TestResult,
+    failedContinued:number
 }
 
 export interface Template{
